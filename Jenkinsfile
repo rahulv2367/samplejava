@@ -15,10 +15,10 @@ node {
         sh 'ls -la'
     }
     
-        stage('Build') {
+        stage('Build') 
         // Perform Maven build
         // Assuming you have a pom.xml file in the root of the repository
-        dir('Javarepo1') {
+        {
         // Set JAVA_HOME
         env.JAVA_HOME = tool(name: 'jdk17', type: 'jdk') // Replace 'jdk11' with your JDK name
         
@@ -31,7 +31,7 @@ node {
 
         // Perform Maven build
         sh 'mvn clean install'
-    }
+
         }
         
         stage('Check Trivy Version') {
