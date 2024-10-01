@@ -45,11 +45,31 @@ node {
         sh 'docker build -t javatechie/devops-integration .'
         }
         stage('Scan Docker Image with Trivy') {
-        // Scan the Docker image using Trivy and generate a JSON report
-        sh "trivy image --format json --output ${trivyReportJson} ${dockerImage}"
-        
-        // Convert JSON report to HTML format
-        // sh "trivy image --format template --template '@/path/to/template.tpl' --output ${trivyReportHtml} ${dockerImage}"
+        sh '''
+           apk add --no-cache wget
+           wget https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl
+           mkdir -p reports
+           trivy image --input ${dockerImage} --severity CRITICAL --format template --template @./html.tpl -o reports/report.html
+         '''
+         publishHTML(target: [
+         allowMissing: true,
+         alwaysLinkToLastBuild: true,
+         keepAll: true,
+         reportDir: 'reports',
+         reportFiles: 'report.html',
+         reportName: 'Trivy Scan',
+         reportTitles: 'Trivy Scan'
+         ])
+
+        // script {
+        //     def trivyCommand = 'trivy image --input image.tar --exit-code 1 --severity CRITICAL'
+        //     def exitCode = sh(script: trivyCommand, returnStatus: true)
+        //     if (exitCode != 0) {
+        //         error("Trivy scan failed with CRITICAL vulnerabilities. Please check the scan report for details.")
+        //     } else {
+        //         echo "Trivy scan completed successfully."
+        //     }
+// //}
         }
 	
     // Further stages can go here
