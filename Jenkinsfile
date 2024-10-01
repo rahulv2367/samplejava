@@ -3,6 +3,9 @@ node {
         // Define the repository URL and branch
         def repoUrl = 'https://github.com/rahulv2367/samplejava.git' // Replace with your GitHub repository URL
         def branch = 'feature' // Change to the branch you want to check out
+	def dockerImage = 'javatechie/devops-integration:latest'
+        def trivyReportJson = 'trivy-report.json'
+        def trivyReportHtml = 'trivy-report.html'    
 
         // Checkout the code from the specified GitHub repository
         checkout([$class: 'GitSCM',
@@ -41,5 +44,13 @@ node {
 	stage('Build docker image'){
         sh 'docker build -t javatechie/devops-integration .'
         }
+        stage('Scan Docker Image with Trivy') {
+        // Scan the Docker image using Trivy and generate a JSON report
+        sh "trivy image --format json --output ${trivyReportJson} ${dockerImage}"
+        
+        // Convert JSON report to HTML format
+        // sh "trivy image --format template --template '@/path/to/template.tpl' --output ${trivyReportHtml} ${dockerImage}"
+        }
+	
     // Further stages can go here
 }
