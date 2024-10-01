@@ -17,7 +17,7 @@ node {
         sh 'pwd'
         sh 'ls -la'
     }
-    
+    /*
         stage('Build') 
         // Perform Maven build
         // Assuming you have a pom.xml file in the root of the repository
@@ -44,6 +44,7 @@ node {
 	stage('Build docker image'){
         sh 'docker build -t javatechie/devops-integration .'
         }
+        */
         stage('Scan Docker Image with Trivy') {
         sh '''
            # apt-get update
