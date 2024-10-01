@@ -46,8 +46,8 @@ node {
         }
         stage('Scan Docker Image with Trivy') {
         sh '''
-           // apt-get update
-	   // apt-get install -y wget
+           # apt-get update
+	   # apt-get install -y wget
            wget https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl
            mkdir -p reports
            trivy image --input ${dockerImage} --severity CRITICAL --format template --template @./html.tpl -o reports/report.html
