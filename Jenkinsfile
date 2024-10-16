@@ -17,7 +17,7 @@ node {
         sh 'pwd'
         sh 'ls -la'
     }
-    /*
+    
         stage('Build') 
         // Perform Maven build
         // Assuming you have a pom.xml file in the root of the repository
@@ -36,6 +36,13 @@ node {
         sh 'mvn clean install'
 
         }
+
+        stage('Code Scan') {
+           withSonarQubeEnv("Sonar") {
+           sh "mvn clean verify sonar:sonar -Dsonar.projectKey=demosonar -Dsonar.projectName='demosonar'"
+     }
+       
+     }
         
         stage('Check Trivy Version') {
         sh "trivy --version"
@@ -44,7 +51,7 @@ node {
 	stage('Build docker image'){
         sh 'docker build -t javatechie/devops-integration .'
         }
-        */
+        
         stage('Scan Docker Image with Trivy') {
         sh '''
            # apt-get update
