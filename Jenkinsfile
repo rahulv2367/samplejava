@@ -3,22 +3,23 @@ node {
 	def dockerImage = 'javatechie/devops-integration:latest'
         def trivyReportJson = 'trivy-report.json'
         def trivyReportHtml = 'trivy-report.html' 
-    stage('Checkout') {
+        
+   // stage('Checkout') {
         // Define the repository URL and branch
-        def repoUrl = 'https://github.com/rahulv2367/samplejava.git' // Replace with your GitHub repository URL
-        def branch = 'feature' // Change to the branch you want to check out 
+      //  def repoUrl = 'https://github.com/rahulv2367/samplejava.git' // Replace with your GitHub repository URL
+    //    def branch = 'feature' // Change to the branch you want to check out 
         // Checkout the code from the specified GitHub repository
-        checkout([$class: 'GitSCM',
-            branches: [[name: "*/${branch}"]],
-            userRemoteConfigs: [[url: repoUrl]]
-        ])
+    //    checkout([$class: 'GitSCM',
+      //      branches: [[name: "*/${branch}"]],
+    //        userRemoteConfigs: [[url: repoUrl]]
+  //      ])
         
         // Optional: Print the current directory and list the files
-        sh 'pwd'
-        sh 'ls -la'
-    }
-    
-        stage('Build') 
+//        sh 'pwd'
+ //       sh 'ls -la'
+//    }
+  
+    stage('Build') 
         // Perform Maven build
         // Assuming you have a pom.xml file in the root of the repository
         {
