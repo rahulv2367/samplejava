@@ -87,7 +87,7 @@ node {
         // Upload artifacts to Nexus
         withCredentials([usernamePassword(credentialsId: nexusCredentialsId, passwordVariable: 'NEXUS_PASSWORD', usernameVariable: 'NEXUS_USERNAME')]) {
             sh """
-                curl -v -u ${NEXUS_USERNAME}:${NEXUS_PASSWORD} --upload-file target/devops-integration.jar ${nexusUrl}
+                curl -v -u ${NEXUS_USERNAME}:${NEXUS_PASSWORD} --upload-file target/devops-integration.jar http://10.41.11.210:8081/repository/safe-demo/com/example/devops-integration/1.0.0/devops-integration-1.0.0.jar
             """
         }
     }
