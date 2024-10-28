@@ -3,7 +3,7 @@ node {
 	def dockerImage = 'javatechie/devops-integration:latest'
         def trivyReportJson = 'trivy-report.json'
         def trivyReportHtml = 'trivy-report.html' 
-	def nexusUrl = 'http://10.41.11.210:8081/#admin/repository/repositories:safe-demo'
+	def nexusUrl = 'http://10.41.11.210:8081/repository/safe-demo/'
         def nexusCredentialsId = 'nexusCred' // Jenkins credentials ID
     stage('Checkout') {
         // Define the repository URL and branch
