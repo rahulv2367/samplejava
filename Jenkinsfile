@@ -60,7 +60,9 @@ node {
 	   # apt-get install -y wget
            wget https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl
            mkdir -p reports
-           trivy image --severity CRITICAL --format template --template @./html.tpl -o reports/report.html javatechie/devops-integration:latest
+	   trivy image --cache-dir ~/.cache/trivy/db --severity CRITICAL --format template --template @./html.tpl -o reports/report.html javatechie/devops-integration:latest
+
+           # trivy image --severity CRITICAL --format template --template @./html.tpl -o reports/report.html javatechie/devops-integration:latest
          '''
          publishHTML(target: [
          allowMissing: true,
