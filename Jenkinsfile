@@ -39,38 +39,38 @@ node {
 
         }
 
-//        stage('Code Scan') {
-//           withSonarQubeEnv("Sonar") {
-//           sh "mvn clean verify sonar:sonar -Dsonar.projectKey=demosonar -Dsonar.projectName='demosonar'"
-//     }
+        stage('Code Scan') {
+           withSonarQubeEnv("Sonar") {
+           sh "mvn clean verify sonar:sonar -Dsonar.projectKey=demosonar -Dsonar.projectName='demosonar'"
+     }
        
-//     }
+     }
         
-//        stage('Check Trivy Version') {
-//        sh "trivy --version"
+        stage('Check Trivy Version') {
+        sh "trivy --version"
                 
-//        }
-//	stage('Build docker image'){
-//        sh 'docker build -t javatechie/devops-integration .'
-//        }
+        }
+	    stage('Build docker image'){
+        sh 'docker build -t javatechie/devops-integration .'
+        }
         
-//        stage('Scan Docker Image with Trivy') {
-//        sh '''
-//           # apt-get update
-//	   # apt-get install -y wget
-//           wget https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl
-//           mkdir -p reports
-//           trivy image --severity CRITICAL --format template --template @./html.tpl -o reports/report.html javatechie/devops-integration:latest
-//         '''
-//         publishHTML(target: [
-//         allowMissing: true,
-//         alwaysLinkToLastBuild: true,
-//         keepAll: true,
-//         reportDir: 'reports',
-//         reportFiles: 'report.html',
-//         reportName: 'Trivy Scan',
-//         reportTitles: 'Trivy Scan'
-//         ])
+        stage('Scan Docker Image with Trivy') {
+        sh '''
+           # apt-get update
+	   # apt-get install -y wget
+           wget https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl
+           mkdir -p reports
+           trivy image --severity CRITICAL --format template --template @./html.tpl -o reports/report.html javatechie/devops-integration:latest
+         '''
+         publishHTML(target: [
+         allowMissing: true,
+         alwaysLinkToLastBuild: true,
+         keepAll: true,
+         reportDir: 'reports',
+         reportFiles: 'report.html',
+         reportName: 'Trivy Scan',
+         reportTitles: 'Trivy Scan'
+         ])
 
         // script {
         //     def trivyCommand = 'trivy image --input image.tar --exit-code 1 --severity CRITICAL'
@@ -81,7 +81,7 @@ node {
         //         echo "Trivy scan completed successfully."
         //     }
 // //}
-//        }
+        }
 	
         stage('Upload to Nexus') {
         // Upload artifacts to Nexus
