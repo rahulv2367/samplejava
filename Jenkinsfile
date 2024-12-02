@@ -45,6 +45,15 @@ node {
      }
        
      }
+
+        stage('Upload to Nexus') {
+        // Upload artifacts to Nexus
+        withCredentials([usernamePassword(credentialsId: nexusCredentialsId, passwordVariable: 'NEXUS_PASSWORD', usernameVariable: 'NEXUS_USERNAME')]) {
+            sh """
+                curl -v -u ${NEXUS_USERNAME}:${NEXUS_PASSWORD} --upload-file target/devops-integration.jar http://10.41.11.210:8081/repository/safe-demo/com/example/devops-integration/1.0.0/devops-integration-1.0.0.jar
+            """
+        }
+    }
         
         stage('Check Trivy Version') {
         sh "trivy --version"
@@ -85,13 +94,30 @@ node {
 // //}
         }
 	
-        stage('Upload to Nexus') {
-        // Upload artifacts to Nexus
-        withCredentials([usernamePassword(credentialsId: nexusCredentialsId, passwordVariable: 'NEXUS_PASSWORD', usernameVariable: 'NEXUS_USERNAME')]) {
+    stage('Tag and Push Docker Image to ECR') {
+    // Define the ECR repository URL and region
+         def ecrRepositoryUrl = '183454673550.dkr.ecr.ap-south-1.amazonaws.com/tnd-dev' // Replace with your ECR repo URL
+         def awsRegion = 'ap-south-1' // Replace with your AWS region
+         def imageTag = "${BUILD_NUMBER}"  // Use Jenkins build number for the tag
+
+    // Log into AWS ECR using AWS CLI (Ensure AWS CLI is configured on Jenkins)
+         withCredentials([usernamePassword(credentialsId: 'Jenkins-ECR-TnD', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+        // Log in to AWS ECR using the AWS CLI
             sh """
-                curl -v -u ${NEXUS_USERNAME}:${NEXUS_PASSWORD} --upload-file target/devops-integration.jar http://10.41.11.210:8081/repository/safe-demo/com/example/devops-integration/1.0.0/devops-integration-1.0.0.jar
+            aws ecr get-login-password --region ${awsRegion} | docker login --username AWS --password-stdin ${ecrRepositoryUrl}
             """
-        }
     }
+
+    // Tag the Docker image with the image name and build number
+         sh """
+        docker tag ${dockerImage} ${ecrRepositoryUrl}:${imageTag}
+         """
+
+    // Push the Docker image to ECR
+         sh """
+        docker push ${ecrRepositoryUrl}:${imageTag}
+         """
+}
+
     // Further stages can go here
 }
