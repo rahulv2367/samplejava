@@ -19,7 +19,7 @@ node {
         sh 'pwd'
         sh 'ls -la'
     }
-    
+    /*
         stage('Build') 
         // Perform Maven build
         // Assuming you have a pom.xml file in the root of the repository
@@ -93,7 +93,7 @@ node {
         //     }
 // //}
         }
-	
+	*/
     stage('Tag and Push Docker Image to ECR') {
     // Define the ECR repository URL and region
          def ecrRepositoryUrl = '183454673550.dkr.ecr.ap-south-1.amazonaws.com/tnd-dev' // Replace with your ECR repo URL
