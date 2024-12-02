@@ -101,7 +101,9 @@ node {
          def imageTag = "${BUILD_NUMBER}"  // Use Jenkins build number for the tag
 
     // Log into AWS ECR using AWS CLI (Ensure AWS CLI is configured on Jenkins)
-         withCredentials([usernamePassword(credentialsId: 'Jenkins-ECR-TnD', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'Jenkins-ECR-TnD']])
+    //     withCredentials([usernamePassword(credentialsId: 'Jenkins-ECR-TnD', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) 
+    {
         // Log in to AWS ECR using the AWS CLI
             sh """
             aws ecr get-login-password --region ${awsRegion} | docker login --username AWS --password-stdin ${ecrRepositoryUrl}
